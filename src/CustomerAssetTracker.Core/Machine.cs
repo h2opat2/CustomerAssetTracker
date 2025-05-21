@@ -2,8 +2,12 @@
 
 public class Machine
 {
-    public static string SayHello()
+    public string Name { get; set;}
+    public string SerialNumber { get; set;}
+    public string Manufacturer { get; set;}
+
+    public string GetFullName()
     {
-        return "Hello World";
+        return $"{Name}, SN: {SerialNumber} ({Manufacturer})";
     }
 }

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CustomerAssetTracker.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+31f0a1d4c83ddd3169b64238ea6c0b01df48a721")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+13ce89ab35ce851500f106d0d5a84839ab01e879")]
 [assembly: System.Reflection.AssemblyProductAttribute("CustomerAssetTracker.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CustomerAssetTracker.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
