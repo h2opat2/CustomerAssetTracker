@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "CustomerAssetTracker.App/1.0.0": {
+        "dependencies": {
+          "CustomerAssetTracker.Core": "1.0.0"
+        },
+        "runtime": {
+          "CustomerAssetTracker.App.dll": {}
+        }
+      },
+      "CustomerAssetTracker.Core/1.0.0": {
+        "runtime": {
+          "CustomerAssetTracker.Core.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "CustomerAssetTracker.App/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "CustomerAssetTracker.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
