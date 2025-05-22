@@ -11,4 +11,4 @@ cmm.SizeY = 10;
 cmm.SizeZ = 8;
 
 Console.WriteLine(cmm.GetFullName());
-//ahoj
+
