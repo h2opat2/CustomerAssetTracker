@@ -1,6 +1,7 @@
 ﻿using CustomerAssetTracker.Core;
 
 Cmm cmm = new Cmm();
+cmm.MachineType = Machine.MachineTypes.Cmm;
 cmm.Name = "LK Altera S";
 cmm.Manufacturer = "LK Metrology";
 cmm.SerialNumber = "123/002017A";
