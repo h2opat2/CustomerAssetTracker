@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\Honza\\Soukromé\\3D Dev\\Customer Asset Tracker\\CustomerAssetTracker\\src\\CustomerAssetTracker.Core\\CustomerAssetTracker.Core.csproj": {}
+    "C:\\Users\\Honza\\Soukromé\\3D Dev\\Customer Asset Tracker\\CustomerAssetTracker\\src\\CustomerAssetTracker.Core\\CustomerAssetTracker.Core.csproj": {}
   },
   "projects": {
-    "c:\\Users\\Honza\\Soukromé\\3D Dev\\Customer Asset Tracker\\CustomerAssetTracker\\src\\CustomerAssetTracker.Core\\CustomerAssetTracker.Core.csproj": {
+    "C:\\Users\\Honza\\Soukromé\\3D Dev\\Customer Asset Tracker\\CustomerAssetTracker\\src\\CustomerAssetTracker.Core\\CustomerAssetTracker.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\Honza\\Soukromé\\3D Dev\\Customer Asset Tracker\\CustomerAssetTracker\\src\\CustomerAssetTracker.Core\\CustomerAssetTracker.Core.csproj",
+        "projectUniqueName": "C:\\Users\\Honza\\Soukromé\\3D Dev\\Customer Asset Tracker\\CustomerAssetTracker\\src\\CustomerAssetTracker.Core\\CustomerAssetTracker.Core.csproj",
         "projectName": "CustomerAssetTracker.Core",
-        "projectPath": "c:\\Users\\Honza\\Soukromé\\3D Dev\\Customer Asset Tracker\\CustomerAssetTracker\\src\\CustomerAssetTracker.Core\\CustomerAssetTracker.Core.csproj",
+        "projectPath": "C:\\Users\\Honza\\Soukromé\\3D Dev\\Customer Asset Tracker\\CustomerAssetTracker\\src\\CustomerAssetTracker.Core\\CustomerAssetTracker.Core.csproj",
         "packagesPath": "C:\\Users\\Honza\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\Honza\\Soukromé\\3D Dev\\Customer Asset Tracker\\CustomerAssetTracker\\src\\CustomerAssetTracker.Core\\obj\\",
+        "outputPath": "C:\\Users\\Honza\\Soukromé\\3D Dev\\Customer Asset Tracker\\CustomerAssetTracker\\src\\CustomerAssetTracker.Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
