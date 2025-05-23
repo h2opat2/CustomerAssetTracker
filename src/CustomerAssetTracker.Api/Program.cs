@@ -30,10 +30,12 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
     builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
-    builder.Services.AddAutoMapper(typeof(CustomerProfile).Assembly);
+    // Komentář: Registrace AutoMapperu.
+    // Tímto se AutoMapper automaticky naskenuje a najde VŠECHNY třídy dědící z Profile
+    // v aktuální assembly (tj. v API projektu).
+    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
     builder.Services.AddControllers();
-    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
 

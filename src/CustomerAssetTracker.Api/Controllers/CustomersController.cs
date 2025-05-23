@@ -32,20 +32,7 @@
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CustomerDto>>> GetCustomers()
         {
-            var customers = await _unitOfWork.Customers.GetAllAsync();
-            
-            // ruční mapování bez AutoMapperu
-            // var customerDtos = customers.Select(c => new CustomerDto
-            // {
-            //     Id = c.Id,
-            //     Name = c.Name,
-            //     Address = c.Address,
-            //     IsForeign = c.IsForeign,
-            //     MachineCount = c.Machines?.Count ?? 0, // Započítá počet strojů (pokud jsou načteny)
-            //     LicenseCount = c.Licenses?.Count ?? 0 // Započítá počet licencí (pokud jsou načteny)
-            // }).ToList();
-
-            // Komentář: Používáme AutoMapper pro mapování kolekce Customer na CustomerDto.
+            var customers = await _unitOfWork.Customers.GetAllAsync(c => c.Machines, c => c.Licenses);
             var customerDtos = _mapper.Map<IEnumerable<CustomerDto>>(customers);
 
             return Ok(customerDtos); // Vrací HTTP 200 OK s daty
@@ -56,36 +43,12 @@
         [HttpGet("{id}")]
         public async Task<ActionResult<CustomerDto>> GetCustomer(int id)
         {
-            // Komentář: Zde je důležité, pokud chceme načíst i související stroje a licence,
-            // musíme použít Eager Loading (např. .Include() v EF Core).
-            // Obecný repozitář to zatím neumí, takže pro plné načtení bychom potřebovali
-            // specifický CustomerRepository nebo rozšířit GenericRepository.
-            // Pro tuto fázi to necháme takto a budeme načítat jen základní data.
-            // V budoucnu se k tomu vrátíme.
-            var customer = await _unitOfWork.Customers.GetByIdAsync(id);
+            var customer = await _unitOfWork.Customers.GetByIdAsync(id, c => c.Machines, c => c.Licenses);
 
             if (customer == null)
             {
                 return NotFound(); // Vrací HTTP 404 Not Found
             }
-
-            // Komentář: Pro detail zákazníka můžeme chtít načíst i jeho stroje a licence.
-            // To vyžaduje buď .Include() v dotazu (což obecný repozitář neumožňuje přímo),
-            // nebo lazy loading (pokud je povolen a DbContext je stále aktivní),
-            // nebo explicitní načtení.
-            // Pro tuto ukázku předpokládáme, že Machines a Licenses jsou null nebo prázdné,
-            // pokud nejsou explicitně načteny.
-            // V pokročilejší fázi bychom použili specifický repozitář nebo rozšířili dotaz.
-
-            // var customerDto = new CustomerDto
-            // {
-            //     Id = customer.Id,
-            //     Name = customer.Name,
-            //     Address = customer.Address,
-            //     IsForeign = customer.IsForeign,
-            //     MachineCount = customer.Machines?.Count ?? 0,
-            //     LicenseCount = customer.Licenses?.Count ?? 0
-            // };
 
             var customerDto = _mapper.Map<CustomerDto>(customer);
 
