@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "4MWpUqArsYKbRvjYb0tjIT/iNzajTOsvLtXJyj2if1A=",
+  "Source": "CustomerAssetTracker.Api",
+  "BasePath": "_content/CustomerAssetTracker.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

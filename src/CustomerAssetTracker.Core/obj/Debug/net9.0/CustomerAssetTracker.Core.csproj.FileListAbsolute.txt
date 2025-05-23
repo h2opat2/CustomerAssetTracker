@@ -1,6 +1,8 @@
 C:\Users\Honza\Soukromé\3D Dev\Customer Asset Tracker\CustomerAssetTracker\src\CustomerAssetTracker.Core\bin\Debug\net9.0\CustomerAssetTracker.Core.deps.json
+C:\Users\Honza\Soukromé\3D Dev\Customer Asset Tracker\CustomerAssetTracker\src\CustomerAssetTracker.Core\bin\Debug\net9.0\CustomerAssetTracker.Core.runtimeconfig.json
 C:\Users\Honza\Soukromé\3D Dev\Customer Asset Tracker\CustomerAssetTracker\src\CustomerAssetTracker.Core\bin\Debug\net9.0\CustomerAssetTracker.Core.dll
 C:\Users\Honza\Soukromé\3D Dev\Customer Asset Tracker\CustomerAssetTracker\src\CustomerAssetTracker.Core\bin\Debug\net9.0\CustomerAssetTracker.Core.pdb
+C:\Users\Honza\Soukromé\3D Dev\Customer Asset Tracker\CustomerAssetTracker\src\CustomerAssetTracker.Core\obj\Debug\net9.0\CustomerAssetTracker.Core.csproj.AssemblyReference.cache
 C:\Users\Honza\Soukromé\3D Dev\Customer Asset Tracker\CustomerAssetTracker\src\CustomerAssetTracker.Core\obj\Debug\net9.0\CustomerAssetTracker.Core.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Honza\Soukromé\3D Dev\Customer Asset Tracker\CustomerAssetTracker\src\CustomerAssetTracker.Core\obj\Debug\net9.0\CustomerAssetTracker.Core.AssemblyInfoInputs.cache
 C:\Users\Honza\Soukromé\3D Dev\Customer Asset Tracker\CustomerAssetTracker\src\CustomerAssetTracker.Core\obj\Debug\net9.0\CustomerAssetTracker.Core.AssemblyInfo.cs
@@ -9,7 +11,5 @@ C:\Users\Honza\Soukromé\3D Dev\Customer Asset Tracker\CustomerAssetTracker\src\
 C:\Users\Honza\Soukromé\3D Dev\Customer Asset Tracker\CustomerAssetTracker\src\CustomerAssetTracker.Core\obj\Debug\net9.0\CustomerAssetTracker.Core.dll
 C:\Users\Honza\Soukromé\3D Dev\Customer Asset Tracker\CustomerAssetTracker\src\CustomerAssetTracker.Core\obj\Debug\net9.0\refint\CustomerAssetTracker.Core.dll
 C:\Users\Honza\Soukromé\3D Dev\Customer Asset Tracker\CustomerAssetTracker\src\CustomerAssetTracker.Core\obj\Debug\net9.0\CustomerAssetTracker.Core.pdb
-C:\Users\Honza\Soukromé\3D Dev\Customer Asset Tracker\CustomerAssetTracker\src\CustomerAssetTracker.Core\obj\Debug\net9.0\ref\CustomerAssetTracker.Core.dll
-C:\Users\Honza\Soukromé\3D Dev\Customer Asset Tracker\CustomerAssetTracker\src\CustomerAssetTracker.Core\bin\Debug\net9.0\CustomerAssetTracker.Core.runtimeconfig.json
-C:\Users\Honza\Soukromé\3D Dev\Customer Asset Tracker\CustomerAssetTracker\src\CustomerAssetTracker.Core\obj\Debug\net9.0\CustomerAssetTracker.Core.csproj.AssemblyReference.cache
 C:\Users\Honza\Soukromé\3D Dev\Customer Asset Tracker\CustomerAssetTracker\src\CustomerAssetTracker.Core\obj\Debug\net9.0\CustomerAssetTracker.Core.genruntimeconfig.cache
+C:\Users\Honza\Soukromé\3D Dev\Customer Asset Tracker\CustomerAssetTracker\src\CustomerAssetTracker.Core\obj\Debug\net9.0\ref\CustomerAssetTracker.Core.dll
