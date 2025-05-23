@@ -1,86 +1,86 @@
 # Customer Asset Tracker
 
-Tento projekt představuje webovou aplikaci pro správu zákazníků, jejich zakoupených strojů, licencí a servisních záznamů. Je navržen s důrazem na moderní .NET technologie, principy objektově orientovaného programování (OOP), návrhové vzory a efektivní práci s daty.
+This project presents a web application for managing customers, their purchased machines, licenses, and service records. It is designed with an emphasis on modern .NET technologies, object-oriented programming (OOP) principles, design patterns, and efficient data handling.
 
-## Obsah
+## Table of Contents
 
-* [Přehled projektu](#přehled-projektu)
-* [Architektura a klíčové komponenty](#architektura-a-klíčové-komponenty)
-    * [Doménové Entity](#doménové-entity)
-    * [Databázová Vrstva (Entity Framework Core)](#databázová-vrstva-entity-framework-core)
-    * [Návrhové Vzory](#návrhové-vzory)
+* [Project Overview](#project-overview)
+* [Architecture and Key Components](#architecture-and-key-components)
+    * [Domain Entities](#domain-entities)
+    * [Database Layer (Entity Framework Core)](#database-layer-entity-framework-core)
+    * [Design Patterns](#design-patterns)
     * [Web API (Backend)](#web-api-backend)
-* [Struktura projektu](#struktura-projektu)
-* [Jak spustit projekt](#jak-spustit-projekt)
-* [Testování](#testování)
-* [Budoucí plány](#budoucí-plány)
-* [Přispívání](#přispívání)
+* [Project Structure](#project-structure)
+* [How to Run the Project](#how-to-run-the-project)
+* [Testing](#testing)
+* [Future Plans](#future-plans)
+* [Contributing](#contributing)
 
 ---
 
-## Přehled projektu
+## Project Overview
 
-Cílem projektu je vytvořit robustní systém pro evidenci a správu majetku zákazníků, který zahrnuje:
-* **Zákazníky:** Základní informace o zákaznících.
-* **Stroje:** Detaily o zakoupených strojích, včetně specifických typů (CMM, Arm).
-* **Licence:** Informace o softwarových licencích vázaných na stroje nebo zákazníky.
-* **Servisní Záznamy:** Historie servisních zásahů pro každý stroj.
+The goal of the project is to create a robust system for recording and managing customer assets, which includes:
+* **Customers:** Basic information about customers.
+* **Machines:** Details about purchased machines, including specific types (CMM, Arm).
+* **Licenses:** Information about software licenses tied to machines or customers.
+* **Service Records:** History of service interventions for each machine.
 
-Projekt je rozdělen do fází a slouží jako praktická ukázka vývoje v .NET.
+The project is divided into phases and serves as a practical demonstration of .NET development.
 
 ---
 
-## Architektura a klíčové komponenty
+## Architecture and Key Components
 
-Projekt je postaven na vrstvené architektuře s jasným oddělením zodpovědností.
+The project is built on a layered architecture with a clear separation of concerns.
 
-### Doménové Entity
+### Domain Entities
 
-Definované v projektu `CustomerAssetTracker.Core`, reprezentují základní obchodní objekty:
+Defined in the `CustomerAssetTracker.Core` project, these represent the fundamental business objects:
 * `Customer`
-* `Machine` (základní třída pro stroje)
-* `Cmm` a `Arm` (dědící z `Machine` s vlastními vlastnostmi a validací)
+* `Machine` (base class for machines)
+* `Cmm` and `Arm` (inheriting from `Machine` with their own properties and validation)
 * `License`
 * `ServiceRecord`
 
-Všechny entity obsahují `Id` pro unikátní identifikaci a navigační vlastnosti pro definování vztahů (např. `Customer` má `List<Machine> Machines`).
+All entities include an `Id` for unique identification and navigation properties to define relationships (e.g., `Customer` has a `List<Machine> Machines`).
 
-### Databázová Vrstva (Entity Framework Core)
+### Database Layer (Entity Framework Core)
 
-Zajišťuje persistenci dat.
-* **SQLite:** Lehká, souborová databáze (`CustomerAssetTracker.db`) pro snadný vývoj a testování.
-* **Entity Framework Core (EF Core):** ORM pro práci s databází pomocí C# objektů.
-    * **`ApplicationDbContext`:** Hlavní kontext pro interakci s databází, mapuje entity na tabulky a obsahuje logiku pro **seedování dat**.
-    * **Migrace:** Spravovány pomocí `dotnet ef`, umožňují sledovat změny v databázovém schématu a aplikovat je.
-    * **`ApplicationDbContextFactory`:** Zajišťuje správnou inicializaci `DbContextu` pro nástroje EF Core v době návrhu.
+Ensures data persistence.
+* **SQLite:** A lightweight, file-based database (`CustomerAssetTracker.db`) for easy development and testing.
+* **Entity Framework Core (EF Core):** An ORM for working with the database using C# objects.
+    * **`ApplicationDbContext`:** The main context for database interaction, mapping entities to tables, and containing **data seeding** logic.
+    * **Migrations:** Managed using `dotnet ef`, allowing tracking changes in the database schema and applying them.
+    * **`ApplicationDbContextFactory`:** Ensures proper `DbContext` initialization for EF Core tools at design time.
 
-### Návrhové Vzory
+### Design Patterns
 
-Pro zlepšení struktury, udržitelnosti a testovatelnosti kódu jsou použity následující vzory:
+The following patterns are used to improve code structure, maintainability, and testability:
 * **Repository Pattern:**
-    * **`IGenericRepository<T>`:** Rozhraní definující obecné CRUD operace.
-    * **`GenericRepository<T>`:** Konkrétní implementace `IGenericRepository<T>` využívající EF Core. Rozšířen o podporu **eager loadingu** (`.Include()`) pro načítání souvisejících dat.
+    * **`IGenericRepository<T>`:** An interface defining common CRUD operations.
+    * **`GenericRepository<T>`:** A concrete implementation of `IGenericRepository<T>` utilizing EF Core. Extended with support for **eager loading** (`.Include()`) to load related data.
 * **Unit of Work Pattern:**
-    * **`IUnitOfWork`:** Rozhraní pro správu transakcí a koordinaci repozitářů.
-    * **`UnitOfWork`:** Implementace `IUnitOfWork`, která zajišťuje atomické uložení všech změn v rámci jedné obchodní transakce.
+    * **`IUnitOfWork`:** An interface for managing transactions and coordinating repositories.
+    * **`UnitOfWork`:** An implementation of `IUnitOfWork` that ensures atomic saving of all changes within a single business transaction.
 
 ### Web API (Backend)
 
-Poskytuje RESTful HTTP služby pro komunikaci s daty.
-* **ASP.NET Core Web API:** Framework pro tvorbu API.
-* **`Program.cs`:** Konfigurace Dependency Injection (DI) pro `DbContext`, `UnitOfWork` a `IMapper`. Zahrnuje také konfiguraci Swagger/OpenAPI.
-* **API Kontrolery:**
+Provides RESTful HTTP services for data communication.
+* **ASP.NET Core Web API:** Framework for building APIs.
+* **`Program.cs`:** Configures Dependency Injection (DI) for `DbContext`, `UnitOfWork`, and `IMapper`. Also includes Swagger/OpenAPI configuration.
+* **API Controllers:**
     * `CustomersController`, `MachinesController`, `LicensesController`, `ServiceRecordsController`.
-    * Zpracovávají HTTP požadavky (GET, POST, PUT, DELETE, PATCH) a využívají `IUnitOfWork` pro interakci s datovou vrstvou.
+    * Handle HTTP requests (GET, POST, PUT, DELETE, PATCH) and use `IUnitOfWork` to interact with the data layer.
 * **Data Transfer Objects (DTOs):**
-    * Jednoduché třídy pro přenos dat mezi API a klientem (`[Entity]Dto`, `Create[Entity]Dto`, `Update[Entity]Dto`, `Patch[Entity]Dto`).
-    * Obsahují validační atributy (`[Required]`, `[MaxLength]`).
+    * Simple classes for transferring data between the API and the client (`[Entity]Dto`, `Create[Entity]Dto`, `Update[Entity]Dto`, `Patch[Entity]Dto`).
+    * Include validation attributes (`[Required]`, `[MaxLength]`).
 * **AutoMapper:**
-    * **`IMapper`:** Používá se pro automatické mapování mezi doménovými entitami a DTOs, snižuje boilerplate kód.
-    * **Mapping Profiles:** Třídy dědící z `AutoMapper.Profile`, kde jsou definována pravidla mapování.
+    * **`IMapper`:** An injected instance used for automatic mapping between domain entities and DTOs, reducing boilerplate code.
+    * **Mapping Profiles:** Classes inheriting from `AutoMapper.Profile` where mapping rules are defined.
 
-## Struktura projektu
-
+## Project Structure
+````text`
 CustomerAssetTracker/
 ├── CustomerAssetTracker.sln
 ├── src/
@@ -100,56 +100,56 @@ CustomerAssetTracker/
 └── test/
 └── CustomerAssetTracker.Core.Tests/   # Unit testy pro CustomerAssetTracker.Core
 └── CustomerAssetTracker.Core.Tests.csproj
+````text`
+## How to Run the Project
 
-## Jak spustit projekt
+To run the project, you need the .NET SDK (version 9.0 or newer).
 
-Pro spuštění projektu potřebuješ .NET SDK (verze 9.0 nebo novější).
-
-1.  **Klonuj repozitář:**
+1.  **Clone the repository:**
     ```bash
     git clone <URL_REPOSITARE>
     cd CustomerAssetTracker
     ```
 
-2.  **Obnov NuGet balíčky a sestav řešení:**
-    Otevři terminál v kořenové složce řešení (`CustomerAssetTracker/`) a spusť:
+2.  **Restore NuGet packages and build the solution:**
+    Open a terminal in the solution's root folder (`CustomerAssetTracker/`) and run:
     ```bash
     dotnet restore
     dotnet build
     ```
 
-3.  **Aplikuj databázové migrace a seeduj data:**
-    Naviguj se do složky `CustomerAssetTracker.Core`:
+3.  **Apply database migrations and seed data:**
+    Navigate to the `CustomerAssetTracker.Core` folder:
     ```bash
     cd src/CustomerAssetTracker.Core
     dotnet ef database update --project .\CustomerAssetTracker.Core.csproj
     ```
-    Tím se vytvoří soubor databáze `CustomerAssetTracker.db` a naplní se ukázkovými daty.
+    This will create the `CustomerAssetTracker.db` database file and populate it with sample data.
 
-4.  **Spusť Web API:**
-    Naviguj se do složky `CustomerAssetTracker.Api`:
+4.  **Run the Web API:**
+    Navigate to the `CustomerAssetTracker.Api` folder:
     ```bash
     cd ../CustomerAssetTracker.Api
     dotnet watch run
     ```
-    Aplikace se spustí a automaticky by se měl otevřít webový prohlížeč na adrese Swagger UI (např. `https://localhost:7113/swagger`). Pokud se prohlížeč neotevře, zkontroluj výstup v terminálu pro URL a otevři ho ručně.
+    The application will start, and a web browser should automatically open to the Swagger UI address (e.g., `https://localhost:7113/swagger`). If the browser does not open, check the terminal output for the URL and open it manually.
 
-## Testování
+## Testing
 
-Projekt obsahuje unit testy pro doménovou logiku.
-* **Spuštění unit testů:**
-    Naviguj se do kořenové složky řešení (`CustomerAssetTracker/`) a spusť:
+The project includes unit tests for the domain logic.
+* **Run unit tests:**
+    Navigate to the solution's root folder (`CustomerAssetTracker/`) and run:
     ```bash
     dotnet test
     ```
 
-## Budoucí plány
+## Future Plans
 
-* Implementace Blazor frontendové aplikace pro interakci s API.
-* Přidání autentizace a autorizace.
-* Pokročilé filtrování, vyhledávání a paginace.
-* Vylepšení správy chyb.
+* Implement a Blazor frontend application to interact with the API.
+* Add authentication and authorization.
+* Advanced filtering, searching, and pagination.
+* Improved error handling.
 
-## Přispívání
+## Contributing
 
-Vítáme jakékoli příspěvky! Pokud najdeš chybu nebo máš nápad na vylepšení, neváhej otevřít "issue" nebo "pull request".
+We welcome any contributions! If you find a bug or have an idea for an improvement, feel free to open an "issue" or a "pull request".
