@@ -84,21 +84,21 @@ Provides RESTful HTTP services for data communication.
 CustomerAssetTracker/
 ├── CustomerAssetTracker.sln
 ├── src/
-│   ├── CustomerAssetTracker.Core/         # Doménové entity, DbContext, rozhraní, repozitáře
+│   ├── CustomerAssetTracker.Core/         # Domain entities, DbContext, interfaces, repositories
 │   │   ├── Data/                          # ApplicationDbContext, ApplicationDbContextFactory
 │   │   │   └── Repositories/              # GenericRepository, UnitOfWork
 │   │   ├── Abstractions/                  # IGenericRepository, IUnitOfWork
 │   │   ├── Entities/                      # Customer, Machine, License, ServiceRecord, Cmm, Arm
 │   │   └── CustomerAssetTracker.Core.csproj
-│   └── CustomerAssetTracker.Api/          # ASP.NET Core Web API projekt
-│       ├── Controllers/                   # API Kontrolery (CustomersController atd.)
-│       ├── DTOs/                          # Data Transfer Objects (CustomerDto, MachineDto atd.)
-│       ├── MappingProfiles/               # AutoMapper profily
+│   └── CustomerAssetTracker.Api/          # ASP.NET Core Web API project
+│       ├── Controllers/                   # API Controllers (CustomersController, etc.)
+│       ├── DTOs/                          # Data Transfer Objects (CustomerDto, MachineDto, etc.)
+│       ├── MappingProfiles/               # AutoMapper profiles
 │       ├── Properties/                    # launchSettings.json
-│       ├── Program.cs                     # Konfigurace DI, Swagger, middleware
+│       ├── Program.cs                     # DI, Swagger, middleware configuration
 │       └── CustomerAssetTracker.Api.csproj
 └── test/
-└── CustomerAssetTracker.Core.Tests/   # Unit testy pro CustomerAssetTracker.Core
+└── CustomerAssetTracker.Core.Tests/   # Unit tests for CustomerAssetTracker.Core
 └── CustomerAssetTracker.Core.Tests.csproj
 ````text`
 ## How to Run the Project
