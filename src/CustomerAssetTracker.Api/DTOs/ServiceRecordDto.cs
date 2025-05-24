@@ -1,12 +1,7 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using CustomerAssetTracker.Core; // Pro přístup k enumům jako MachineTypes, LicenseType
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CustomerAssetTracker.Api.DTOs
 {
-    // Komentář: DTOs pro entitu ServiceRecord
-
-    // DTO pro zobrazení detailů servisního záznamu.
     public class ServiceRecordDto
     {
         public int Id { get; set; }
@@ -14,46 +9,45 @@ namespace CustomerAssetTracker.Api.DTOs
         public string Technician { get; set; } = string.Empty;
         public string Text { get; set; } = string.Empty;
         public int MachineId { get; set; }
-        public string MachineName { get; set; } = string.Empty; // Pro zobrazení názvu stroje
+        public string MachineName { get; set; } = string.Empty;
     }
 
-    // DTO pro vytváření nového servisního záznamu.
-    public class CreateServiceRecordDto
+    //Base DTO Service Record class, which is used for both creating and updating classes.
+    public abstract class BaseServiceRecordDto
     {
-        [Required(ErrorMessage = "Datum je povinné.")]
+        [Required(ErrorMessage = "Date field is mandatory.")]
+        [DataType(DataType.Date, ErrorMessage = "Date must be a valid date.")]
         public DateTime Date { get; set; }
 
-        [Required(ErrorMessage = "Technik je povinný.")]
+        [Required(ErrorMessage = "Technician field is mandatory.")]
         public string Technician { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Text záznamu je povinný.")]
+        [Required(ErrorMessage = "Text field is mandatory.")]
+        [MaxLength(500, ErrorMessage = "Text must not exceed 500 characters.")]
         public string Text { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "ID stroje je povinné.")]
+        [Required(ErrorMessage = "Machine ID field is mandatory.")]
         public int MachineId { get; set; }
+    }
+
+    public class CreateServiceRecordDto : BaseServiceRecordDto
+    {
+        // This class inherits from BaseServiceRecordDto and can be extended if needed.
     }
 
     // DTO pro aktualizaci existujícího servisního záznamu.
-    public class UpdateServiceRecordDto
+    public class UpdateServiceRecordDto : BaseServiceRecordDto
     {
-        [Required(ErrorMessage = "Datum je povinné.")]
-        public DateTime Date { get; set; }
-
-        [Required(ErrorMessage = "Technik je povinný.")]
-        public string Technician { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Text záznamu je povinný.")]
-        public string Text { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "ID stroje je povinné.")]
-        public int MachineId { get; set; }
+        // This class inherits from BaseServiceRecordDto and can be extended if needed.
     }
 
-    // DTO pro částečnou aktualizaci servisního záznamu.
     public class PatchServiceRecordDto
     {
+        [DataType(DataType.Date, ErrorMessage = "Date must be a valid date.")]
         public DateTime? Date { get; set; }
         public string? Technician { get; set; }
+
+        [MaxLength(500, ErrorMessage = "Text must not exceed 500 characters.")]
         public string? Text { get; set; }
         public int? MachineId { get; set; }
     }

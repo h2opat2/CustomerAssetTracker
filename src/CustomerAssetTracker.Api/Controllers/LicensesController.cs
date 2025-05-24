@@ -2,11 +2,8 @@
 using CustomerAssetTracker.Core.Abstractions;
 using CustomerAssetTracker.Core;
 using CustomerAssetTracker.Api.DTOs;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.EntityFrameworkCore; // Pro .Include() - dočasně zde pro ukázku, ideálně v repozitáři
+
 
 namespace CustomerAssetTracker.Api.Controllers
 {
@@ -23,28 +20,21 @@ namespace CustomerAssetTracker.Api.Controllers
             _mapper = mapper;
         }
 
-        // Komentář: GET /api/licenses
+        // GET /api/licenses
         [HttpGet]
         public async Task<ActionResult<IEnumerable<LicenseDto>>> GetLicenses()
         {
-            var licenses = await _unitOfWork.Licenses.GetAllAsync(
-                l => l.Machine,
-                l => l.Customer
-            );
+            var licenses = await _unitOfWork.Licenses.GetAllAsync(l => l.Machine, l => l.Customer);
             var licenseDtos = _mapper.Map<IEnumerable<LicenseDto>>(licenses);
             return Ok(licenseDtos);
         }
 
-        // Komentář: GET /api/licenses/{id}
+        // GET /api/licenses/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<LicenseDto>> GetLicense(int id)
         {
-            // Komentář: Stejně jako výše, pro MachineName a CustomerName potřebujeme eager loading.
-            var license = await _unitOfWork.Licenses.GetByIdAsync(
-                id,
-                l => l.Machine,
-                l => l.Customer
-            );
+
+            var license = await _unitOfWork.Licenses.GetByIdAsync(id, l => l.Machine, l => l.Customer);
             if (license == null)
             {
                 return NotFound();
@@ -54,32 +44,31 @@ namespace CustomerAssetTracker.Api.Controllers
             return Ok(licenseDto);
         }
 
-        // Komentář: POST /api/licenses
+        // POST /api/licenses
         [HttpPost]
         public async Task<ActionResult<LicenseDto>> CreateLicense(CreateLicenseDto createLicenseDto)
         {
             var license = _mapper.Map<License>(createLicenseDto);
 
-            // Komentář: Ověření existence Machine a Customer před přidáním licence.
-            // Toto je základní validace referenční integrity.
+            // Validate Machine and Customer exists before adding reference to License.
             if (license.MachineId.HasValue)
             {
                 var machine = await _unitOfWork.Machines.GetByIdAsync(license.MachineId.Value);
                 if (machine == null)
                 {
-                    ModelState.AddModelError("MachineId", "Zadaný stroj neexistuje.");
+                    ModelState.AddModelError("MachineId", "Machine with the specified ID does not exist.");
                     return BadRequest(ModelState);
                 }
-                license.Machine = machine; // Připojení entity pro správné uložení vazby
+                license.Machine = machine;
             }
 
             var customer = await _unitOfWork.Customers.GetByIdAsync(license.CustomerId);
             if (customer == null)
             {
-                ModelState.AddModelError("CustomerId", "Zadaný zákazník neexistuje.");
+                ModelState.AddModelError("CustomerId", "Customer with the specified ID does not exist.");
                 return BadRequest(ModelState);
             }
-            license.Customer = customer; // Připojení entity pro správné uložení vazby
+            license.Customer = customer;
 
 
             await _unitOfWork.Licenses.AddAsync(license);
@@ -89,7 +78,7 @@ namespace CustomerAssetTracker.Api.Controllers
             return CreatedAtAction(nameof(GetLicense), new { id = license.Id }, licenseDto);
         }
 
-        // Komentář: PUT /api/licenses/{id}
+        // PUT /api/licenses/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateLicense(int id, UpdateLicenseDto updateLicenseDto)
         {
@@ -102,24 +91,24 @@ namespace CustomerAssetTracker.Api.Controllers
 
             _mapper.Map(updateLicenseDto, license);
 
-            // Komentář: Ověření existence Machine a Customer před aktualizací licence.
+            // Validate Machine and Customer exists before adding reference to License.
             if (license.MachineId.HasValue)
             {
                 var machine = await _unitOfWork.Machines.GetByIdAsync(license.MachineId.Value);
                 if (machine == null)
                 {
-                    ModelState.AddModelError("MachineId", "Zadaný stroj neexistuje.");
+                    ModelState.AddModelError("MachineId", "Machine with the specified ID does not exist..");
                     return BadRequest(ModelState);
                 }
                 license.Machine = machine;
             } else {
-                license.Machine = null; // Pokud MachineId je null, odpojit stroj
+                license.Machine = null; 
             }
 
             var customer = await _unitOfWork.Customers.GetByIdAsync(license.CustomerId);
             if (customer == null)
             {
-                ModelState.AddModelError("CustomerId", "Zadaný zákazník neexistuje.");
+                ModelState.AddModelError("CustomerId", "Customer with the specified ID does not exist.");
                 return BadRequest(ModelState);
             }
             license.Customer = customer;
@@ -130,7 +119,7 @@ namespace CustomerAssetTracker.Api.Controllers
             return NoContent();
         }
 
-        // Komentář: DELETE /api/licenses/{id}
+        // DELETE /api/licenses/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLicense(int id)
         {
@@ -147,7 +136,7 @@ namespace CustomerAssetTracker.Api.Controllers
             return NoContent();
         }
 
-        // Komentář: PATCH /api/licenses/{id}
+        // PATCH /api/licenses/{id}
         [HttpPatch("{id}")]
         public async Task<IActionResult> PatchLicense(int id, PatchLicenseDto patchLicenseDto)
         {
@@ -168,12 +157,12 @@ namespace CustomerAssetTracker.Api.Controllers
                 var machine = await _unitOfWork.Machines.GetByIdAsync(patchLicenseDto.MachineId.Value);
                 if (machine == null)
                 {
-                    ModelState.AddModelError("MachineId", "Zadaný stroj neexistuje.");
+                    ModelState.AddModelError("MachineId", "Machine with the specified ID does not exist.");
                     return BadRequest(ModelState);
                 }
                 license.MachineId = patchLicenseDto.MachineId.Value;
                 license.Machine = machine;
-            } else if (patchLicenseDto.MachineId == null) { // Pokud je explicitně posláno null pro MachineId
+            } else if (patchLicenseDto.MachineId == null) { // explicitly set MachineId to null
                 license.MachineId = null;
                 license.Machine = null;
             }
@@ -183,13 +172,12 @@ namespace CustomerAssetTracker.Api.Controllers
                 var customer = await _unitOfWork.Customers.GetByIdAsync(patchLicenseDto.CustomerId.Value);
                 if (customer == null)
                 {
-                    ModelState.AddModelError("CustomerId", "Zadaný zákazník neexistuje.");
+                    ModelState.AddModelError("CustomerId", "Customer with the specified ID does not exist.");
                     return BadRequest(ModelState);
                 }
                 license.CustomerId = patchLicenseDto.CustomerId.Value;
                 license.Customer = customer;
             }
-
 
             _unitOfWork.Licenses.Update(license);
             await _unitOfWork.CompleteAsync();

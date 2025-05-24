@@ -1,24 +1,23 @@
-﻿    using AutoMapper; // Důležité pro Profile
-    using CustomerAssetTracker.Core; // Pro doménové entity
-    using CustomerAssetTracker.Api.DTOs; // Pro DTOs
+﻿    using AutoMapper;
+    using CustomerAssetTracker.Core;
+    using CustomerAssetTracker.Api.DTOs;
 
 namespace CustomerAssetTracker.Api.MappingProfiles
 {
-    // Komentář: Třída CustomerProfile dědí z AutoMapper.Profile.
-    // Zde definujeme pravidla mapování mezi entitami a DTOs.
     public class CustomerProfile : Profile
     {
         public CustomerProfile()
         {
-            // Komentář: Mapování z Customer (entity) na CustomerDto.
+            // Mapping from Customer (entity) to CustomerDto.
+            // Machine and License counts are calculated from the collections in the Customer entity.
             CreateMap<Customer, CustomerDto>()
                 .ForMember(dest => dest.MachineCount, opt => opt.MapFrom(src => src.Machines.Count))
                 .ForMember(dest => dest.LicenseCount, opt => opt.MapFrom(src => src.Licenses.Count));
 
-            // Komentář: Mapování z CreateCustomerDto na Customer (entitu).
+            // Mapping from CreateCustomerDto to Customer (entity).
             CreateMap<CreateCustomerDto, Customer>();
 
-            // Komentář: Mapování z UpdateCustomerDto na Customer (entitu).
+            // Mapping from UpdateCustomerDto to Customer (entity).
             CreateMap<UpdateCustomerDto, Customer>();
         }
     }
@@ -27,19 +26,15 @@ namespace CustomerAssetTracker.Api.MappingProfiles
     {
         public MachineProfile()
         {
-            // Mapování z Machine (entity) na MachineDto.
-            // Zde mapujeme enum MachineType na string a počty kolekcí.
-            // Důležité: CustomerName a MachineName budou null/prázdné, pokud nejsou související entity načteny (Eager Loading).
-            // Pro správné načtení CustomerName/MachineName by bylo potřeba rozšířit GenericRepository
-            // nebo vytvořit specifické repozitáře s metodami pro .Include().
+            // Mapping from Machine (entity) to MachineDto.
+            // 
             CreateMap<Machine, MachineDto>()
                 .ForMember(dest => dest.MachineType, opt => opt.MapFrom(src => src.MachineType.ToString()))
                 .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.Customer != null ? src.Customer.Name : string.Empty))
                 .ForMember(dest => dest.LicenseCount, opt => opt.MapFrom(src => src.Licenses != null ? src.Licenses.Count : 0))
                 .ForMember(dest => dest.ServiceRecordCount, opt => opt.MapFrom(src => src.ServiceRecords != null ? src.ServiceRecords.Count : 0));
 
-            // Mapování z DTO na Machine entitu.
-            // Pro MachineType mapujeme string na enum.
+            // Mapping from CreateMachineDto and UpdateMachineDto to Machine (entity).
             CreateMap<CreateMachineDto, Machine>()
                 .ForMember(dest => dest.MachineType, opt => opt.MapFrom(src => Enum.Parse<Machine.MachineTypes>(src.MachineType)));
             CreateMap<UpdateMachineDto, Machine>()
@@ -47,18 +42,17 @@ namespace CustomerAssetTracker.Api.MappingProfiles
         }
     }
     
-    // Komentář: Mapovací profil pro entitu License
     public class LicenseProfile : Profile
     {
         public LicenseProfile()
         {
-            // Mapování z License (entity) na LicenseDto.
+            // Mapping from License (entity) to LicenseDto.
             CreateMap<License, LicenseDto>()
                 .ForMember(dest => dest.LicenseType, opt => opt.MapFrom(src => src.Type.ToString()))
                 .ForMember(dest => dest.MachineName, opt => opt.MapFrom(src => src.Machine != null ? src.Machine.Name : null))
                 .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.Customer != null ? src.Customer.Name : string.Empty));
 
-            // Mapování z DTO na License entitu.
+            // Mapping from CreateLicenseDto and UpdateLicenseDto to License (entity).
             CreateMap<CreateLicenseDto, License>()
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => Enum.Parse<License.LicenseType>(src.LicenseType)));
             CreateMap<UpdateLicenseDto, License>()
@@ -66,16 +60,15 @@ namespace CustomerAssetTracker.Api.MappingProfiles
         }
     }
 
-    // Komentář: Mapovací profil pro entitu ServiceRecord
     public class ServiceRecordProfile : Profile
     {
         public ServiceRecordProfile()
         {
-            // Mapování z ServiceRecord (entity) na ServiceRecordDto.
+            // Mapping from ServiceRecord (entity) to ServiceRecordDto.
             CreateMap<ServiceRecord, ServiceRecordDto>()
                 .ForMember(dest => dest.MachineName, opt => opt.MapFrom(src => src.Machine != null ? src.Machine.Name : string.Empty));
 
-            // Mapování z DTO na ServiceRecord entitu.
+            // Mapping from CreateServiceRecordDto and UpdateServiceRecordDto to ServiceRecord (entity).
             CreateMap<CreateServiceRecordDto, ServiceRecord>();
             CreateMap<UpdateServiceRecordDto, ServiceRecord>();
         }

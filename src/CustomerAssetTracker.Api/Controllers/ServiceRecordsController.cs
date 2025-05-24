@@ -2,11 +2,7 @@
 using CustomerAssetTracker.Core.Abstractions;
 using CustomerAssetTracker.Core;
 using CustomerAssetTracker.Api.DTOs;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.EntityFrameworkCore; // Pro .Include() - dočasně zde pro ukázku, ideálně v repozitáři
 
 namespace CustomerAssetTracker.Api.Controllers
 {
@@ -23,7 +19,7 @@ namespace CustomerAssetTracker.Api.Controllers
             _mapper = mapper;
         }
 
-        // Komentář: GET /api/servicerecords
+        // GET /api/servicerecords
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ServiceRecordDto>>> GetServiceRecords()
         {
@@ -32,7 +28,7 @@ namespace CustomerAssetTracker.Api.Controllers
             return Ok(serviceRecordDtos);
         }
 
-        // Komentář: GET /api/servicerecords/{id}
+        // GET /api/servicerecords/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<ServiceRecordDto>> GetServiceRecord(int id)
         {
@@ -47,20 +43,20 @@ namespace CustomerAssetTracker.Api.Controllers
             return Ok(serviceRecordDto);
         }
 
-        // Komentář: POST /api/servicerecords
+        // POST /api/servicerecords
         [HttpPost]
         public async Task<ActionResult<ServiceRecordDto>> CreateServiceRecord(CreateServiceRecordDto createServiceRecordDto)
         {
             var serviceRecord = _mapper.Map<ServiceRecord>(createServiceRecordDto);
 
-            // Komentář: Ověření existence Machine před přidáním servisního záznamu.
+            // Machine validation before adding the service record.
             var machine = await _unitOfWork.Machines.GetByIdAsync(serviceRecord.MachineId);
             if (machine == null)
             {
-                ModelState.AddModelError("MachineId", "Zadaný stroj neexistuje.");
+                ModelState.AddModelError("MachineId", "Machine with the specified ID does not exist.");
                 return BadRequest(ModelState);
             }
-            serviceRecord.Machine = machine; // Připojení entity pro správné uložení vazby
+            serviceRecord.Machine = machine;
 
             await _unitOfWork.ServiceRecords.AddAsync(serviceRecord);
             await _unitOfWork.CompleteAsync();
@@ -69,7 +65,7 @@ namespace CustomerAssetTracker.Api.Controllers
             return CreatedAtAction(nameof(GetServiceRecord), new { id = serviceRecord.Id }, serviceRecordDto);
         }
 
-        // Komentář: PUT /api/servicerecords/{id}
+        // PUT /api/servicerecords/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateServiceRecord(int id, UpdateServiceRecordDto updateServiceRecordDto)
         {
@@ -82,11 +78,11 @@ namespace CustomerAssetTracker.Api.Controllers
 
             _mapper.Map(updateServiceRecordDto, serviceRecord);
 
-            // Komentář: Ověření existence Machine před aktualizací.
+            // Machine validation before adding the service record.
             var machine = await _unitOfWork.Machines.GetByIdAsync(serviceRecord.MachineId);
             if (machine == null)
             {
-                ModelState.AddModelError("MachineId", "Zadaný stroj neexistuje.");
+                ModelState.AddModelError("MachineId", "Machine with the specified ID does not exist.");
                 return BadRequest(ModelState);
             }
             serviceRecord.Machine = machine;
@@ -97,7 +93,7 @@ namespace CustomerAssetTracker.Api.Controllers
             return NoContent();
         }
 
-        // Komentář: DELETE /api/servicerecords/{id}
+        // DELETE /api/servicerecords/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteServiceRecord(int id)
         {
@@ -114,7 +110,7 @@ namespace CustomerAssetTracker.Api.Controllers
             return NoContent();
         }
 
-        // Komentář: PATCH /api/servicerecords/{id}
+        // PATCH /api/servicerecords/{id}
         [HttpPatch("{id}")]
         public async Task<IActionResult> PatchServiceRecord(int id, PatchServiceRecordDto patchServiceRecordDto)
         {
@@ -125,6 +121,7 @@ namespace CustomerAssetTracker.Api.Controllers
                 return NotFound();
             }
 
+            // Manually mapping properties from PatchServiceRecordDto to ServiceRecord
             if (patchServiceRecordDto.Date.HasValue) serviceRecord.Date = patchServiceRecordDto.Date.Value;
             if (patchServiceRecordDto.Technician != null) serviceRecord.Technician = patchServiceRecordDto.Technician;
             if (patchServiceRecordDto.Text != null) serviceRecord.Text = patchServiceRecordDto.Text;
@@ -133,7 +130,7 @@ namespace CustomerAssetTracker.Api.Controllers
                 var machine = await _unitOfWork.Machines.GetByIdAsync(patchServiceRecordDto.MachineId.Value);
                 if (machine == null)
                 {
-                    ModelState.AddModelError("MachineId", "Zadaný stroj neexistuje.");
+                    ModelState.AddModelError("MachineId", "Machine with the specified ID does not exist.");
                     return BadRequest(ModelState);
                 }
                 serviceRecord.MachineId = patchServiceRecordDto.MachineId.Value;

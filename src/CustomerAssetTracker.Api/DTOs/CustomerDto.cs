@@ -1,46 +1,34 @@
-﻿    using System.ComponentModel.DataAnnotations; // Pro validace
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CustomerAssetTracker.Api.DTOs
 {
-    // Komentář: DTO pro zobrazení detailů zákazníka.
-    // Obsahuje pouze vlastnosti, které chceme vystavit klientovi.
     public class CustomerDto
     {
         public int Id { get; set; }
-        public string Name { get; set; } = string.Empty; // Inicializace pro null-safety
+        public string Name { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
         public bool IsForeign { get; set; }
-        // Můžeme přidat i count Machines, Licenses, ale ne celé objekty kvůli cyklickým referencím
         public int MachineCount { get; set; }
         public int LicenseCount { get; set; }
     }
 
-    // Komentář: DTO pro vytváření nového zákazníka.
-    // Může mít odlišné validační požadavky nebo méně polí.
-    public class CreateCustomerDto
+    //Base DTO Customer class, which is used for both creating and updating classes.
+    public abstract class BaseCustomerDto
     {
-        [Required(ErrorMessage = "Jméno je povinné.")] // Příklad validace
-        [MaxLength(100, ErrorMessage = "Jméno nesmí být delší než 100 znaků.")]
+        [Required(ErrorMessage = "Name field is mandatory")]
         public string Name { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Adresa je povinná.")]
+        [Required(ErrorMessage = "Address field is mandatory")]
         public string Address { get; set; } = string.Empty;
-
         public bool IsForeign { get; set; }
     }
-
-    // Komentář: DTO pro aktualizaci existujícího zákazníka.
-    // Může mít stejná pole jako CreateCustomerDto, ale může mít i Id.
-    public class UpdateCustomerDto
+    public class CreateCustomerDto : BaseCustomerDto
     {
-        [Required(ErrorMessage = "Jméno je povinné.")]
-        [MaxLength(100, ErrorMessage = "Jméno nesmí být delší než 100 znaků.")]
-        public string Name { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Adresa je povinná.")]
-        public string Address { get; set; } = string.Empty;
-
-        public bool IsForeign { get; set; }
+        // This class inherits from BaseCustomerDto and can be extended if needed.
+    }
+    public class UpdateCustomerDto : BaseCustomerDto
+    {   
+        // This class inherits from BaseCustomerDto and can be extended if needed.   
     }
         
     public class PatchCustomerDto
@@ -49,5 +37,5 @@ namespace CustomerAssetTracker.Api.DTOs
         public string? Address { get; set; }
         public bool? IsForeign { get; set; } 
     }
-    }
+}
     

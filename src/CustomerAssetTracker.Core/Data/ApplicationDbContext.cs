@@ -1,6 +1,4 @@
 ﻿    using Microsoft.EntityFrameworkCore;
-    using CustomerAssetTracker.Core;
-    using System.Linq;
 
     namespace CustomerAssetTracker.Core.Data
 {
@@ -37,7 +35,7 @@
                         SerialNumber = "CMM-SN-001",
                         Manufacturer = "Hexagon",
                         PurchaseDate = new DateTime(2022, 1, 15),
-                        CustomerId = 1, // Vazba na ABC Company
+                        CustomerId = 1, // Reference to ABC Company
                         MachineType = Machine.MachineTypes.Cmm
                     },
                     new Machine
@@ -47,7 +45,7 @@
                         SerialNumber = "ARM-SN-002",
                         Manufacturer = "FARO",
                         PurchaseDate = new DateTime(2023, 3, 10),
-                        CustomerId = 1, // Vazba na ABC Company
+                        CustomerId = 1, // Reference to ABC Company
                         MachineType = Machine.MachineTypes.Arm
                     },
                     new Machine
@@ -57,7 +55,7 @@
                         SerialNumber = "LT-SN-003",
                         Manufacturer = "Leica",
                         PurchaseDate = new DateTime(2021, 6, 20),
-                        CustomerId = 2, // Vazba na Global Corp
+                        CustomerId = 2, // Reference to Global Corp
                         MachineType = Machine.MachineTypes.LaserTracker
                     },
                     new Machine
@@ -67,7 +65,7 @@
                         SerialNumber = "SK1230054",
                         Manufacturer = "Scantech",
                         PurchaseDate = new DateTime(2024, 12, 10),
-                        CustomerId = 3, // KovoRobo
+                        CustomerId = 3, // Reference to KovoRobo
                         MachineType = Machine.MachineTypes.HandHeldScanner
                     }
                 );
@@ -81,8 +79,8 @@
                         Version = "2023.1",
                         Vendor = "Hexagon",
                         MaintenanceContract = new DateTime(2025, 12, 31),
-                        MachineId = 1, // Vazba na CMM XYZ-1000
-                        CustomerId = 1, // Vazba na ABC Company
+                        MachineId = 1, // Reference to CMM XYZ-1000
+                        CustomerId = 1, // Reference to ABC Company
                         Type = License.LicenseType.Dongle
                     },
                     new License
@@ -92,8 +90,8 @@
                         Version = "2024",
                         Vendor = "InnovMetric",
                         MaintenanceContract = new DateTime(2024, 11, 1),
-                        MachineId = 2, // Vazba na Arm R-7
-                        CustomerId = 1, // Vazba na ABC Company
+                        MachineId = 2, // Reference to Arm R-7
+                        CustomerId = 1, // Reference to ABC Company
                         Type = License.LicenseType.Floating
                     },
                     new License
@@ -102,9 +100,9 @@
                         Software = "SpatialAnalyzer",
                         Version = "2023",
                         Vendor = "New River Kinematics",
-                        MaintenanceContract = null, // Příklad nullable MaintenanceContract
-                        MachineId = 3, // Vazba na Laser Tracker LT-500
-                        CustomerId = 2, // Vazba na Global Corp
+                        MaintenanceContract = null,
+                        MachineId = 3, // Reference to Laser Tracker LT-500
+                        CustomerId = 2, // Reference to Global Corp
                         Type = License.LicenseType.Software
                     },
                     new License
@@ -113,9 +111,9 @@
                         Software = "PolyWorks",
                         Version = "2024",
                         Vendor = "InnovMetric",
-                        MaintenanceContract = new DateTime(2025, 12, 1), // Příklad nullable MaintenanceContract
-                        MachineId = 4, // Vazba na NimbleTrack
-                        CustomerId = 3, // Vazba na KovoRobo
+                        MaintenanceContract = new DateTime(2025, 12, 1), 
+                        MachineId = 4, // Reference to NimbleTrack
+                        CustomerId = 3, // Reference to KovoRobo
                         Type = License.LicenseType.Dongle
                     }
                     ,
@@ -125,14 +123,14 @@
                         Software = "IMK UP!",
                         Version = "3.4.3",
                         Vendor = "Topmes",
-                        MaintenanceContract = null, // Příklad nullable MaintenanceContract
-                        MachineId = null,  // Příklad nullable Machine
-                        CustomerId = 2, // Vazba na Global Corp
+                        MaintenanceContract = null,
+                        MachineId = null,
+                        CustomerId = 2, // Reference to Global Corp
                         Type = License.LicenseType.Software
                     }
                 );
 
-                // Seedování servisních záznamů
+                // Seeding service records
                 modelBuilder.Entity<ServiceRecord>().HasData(
                     new ServiceRecord
                     {
@@ -140,7 +138,7 @@
                         Date = new DateTime(2023, 5, 10),
                         Technician = "Jan Novák",
                         Text = "Pravidelná kalibrace a údržba. Vyměněny filtry.",
-                        MachineId = 1 // Vazba na CMM XYZ-1000
+                        MachineId = 1 // Reference to CMM XYZ-1000
                     },
                     new ServiceRecord
                     {
@@ -148,7 +146,7 @@
                         Date = new DateTime(2024, 1, 25),
                         Technician = "Petra Svobodová",
                         Text = "Oprava kloubu ramene. Testováno a funkční.",
-                        MachineId = 2 // Vazba na Arm R-7
+                        MachineId = 2 // Reference to Arm R-7
                     }
                     ,
                     new ServiceRecord
@@ -157,7 +155,7 @@
                         Date = new DateTime(2024, 5, 25),
                         Technician = "Jan Novák",
                         Text = "Periodická 1 roční kalibrace dle ISO 10360",
-                        MachineId = 1 // Vazba na CMM XYZ-1000
+                        MachineId = 1 // Reference to CMM XYZ-1000
                     }
                 );
         }

@@ -8,15 +8,13 @@ namespace CustomerAssetTracker.Core.Abstractions
     {
         // General CRUD operatons available for any entity of type <T>
         Task<T?> GetByIdAsync(int id);
+        Task<T?> GetByIdAsync(int id, params Expression<Func<T, object>>[] includes);
         Task<IEnumerable<T>> GetAllAsync();
+        Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includes);
         Task AddAsync(T entity);
         void Update(T entity);
         void Delete(T entity);
-        // Komentář: Nová metoda pro získání entity podle ID s možností eager loading souvisejících entit.
-        // 'includes' je pole výrazů, které specifikují, které navigační vlastnosti se mají načíst.
-        Task<T?> GetByIdAsync(int id, params Expression<Func<T, object>>[] includes);
-
-        // Komentář: Nová metoda pro získání všech entit s možností eager loading souvisejících entit.
-        Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includes);
+        
+        
     }
 }

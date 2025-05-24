@@ -1,15 +1,9 @@
 ﻿
-using System;
 using System.ComponentModel.DataAnnotations;
-using CustomerAssetTracker.Core; // Pro přístup k enumům jako MachineTypes, LicenseType
 
 namespace CustomerAssetTracker.Api.DTOs
 {
-    // Komentář: DTOs pro entitu Machine
 
-    // DTO pro zobrazení detailů stroje.
-    // Zahrnuje CustomerId a CustomerName pro snadnější zobrazení.
-    // Dále počty souvisejících záznamů.
     public class MachineDto
     {
         public int Id { get; set; }
@@ -17,73 +11,55 @@ namespace CustomerAssetTracker.Api.DTOs
         public string SerialNumber { get; set; } = string.Empty;
         public string Manufacturer { get; set; } = string.Empty;
         public DateTime PurchaseDate { get; set; }
-        public string MachineType { get; set; } = string.Empty; // Reprezentace enum jako string
+        public string MachineType { get; set; } = string.Empty;
 
         public int CustomerId { get; set; }
-        public string CustomerName { get; set; } = string.Empty; // Pro zobrazení jména zákazníka
+        public string CustomerName { get; set; } = string.Empty;
 
         public int LicenseCount { get; set; }
         public int ServiceRecordCount { get; set; }
     }
 
-    // DTO pro vytváření nového stroje.
-    public class CreateMachineDto
+    //Base DTO Machine class, which is used for both creating and updating classes.
+    public abstract class BaseMachineDto
     {
-        [Required(ErrorMessage = "ID zákazníka je povinné.")]
+        [Required(ErrorMessage = "Customer ID field is mandatory.")]
         public int CustomerId { get; set; }
 
-        [Required(ErrorMessage = "Název stroje je povinný.")]
-        [MaxLength(100, ErrorMessage = "Název stroje nesmí být delší než 100 znaků.")]
+        [Required(ErrorMessage = "Machine name field is mandatory.")]
         public string Name { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Sériové číslo je povinné.")]
-        [MaxLength(50, ErrorMessage = "Sériové číslo nesmí být delší než 50 znaků.")]
+        [Required(ErrorMessage = "Serial number field is mandatory.")]
         public string SerialNumber { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Výrobce je povinný.")]
-        [MaxLength(100, ErrorMessage = "Výrobce nesmí být delší než 100 znaků.")]
+        [Required(ErrorMessage = "Manufacturer field is mandatory.")]
         public string Manufacturer { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Datum nákupu je povinné.")]
+        [Required(ErrorMessage = "Purchase date field is mandatory.")]
+        [DataType(DataType.Date, ErrorMessage = "Purchase date must be a valid date.")]
         public DateTime PurchaseDate { get; set; }
 
-        [Required(ErrorMessage = "Typ stroje je povinný.")]
-        public string MachineType { get; set; } = string.Empty; // Očekává string, který se namapuje na enum
+        [Required(ErrorMessage = "Machine type field is mandatory.")]
+        public string MachineType { get; set; } = string.Empty; //
 
     }
 
-    // DTO pro aktualizaci existujícího stroje (úplná náhrada).
-    public class UpdateMachineDto
+    public class CreateMachineDto : BaseMachineDto
     {
-        [Required(ErrorMessage = "ID zákazníka je povinné.")]
-        public int CustomerId { get; set; }
-
-        [Required(ErrorMessage = "Název stroje je povinný.")]
-        [MaxLength(100, ErrorMessage = "Název stroje nesmí být delší než 100 znaků.")]
-        public string Name { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Sériové číslo je povinné.")]
-        [MaxLength(50, ErrorMessage = "Sériové číslo nesmí být delší než 50 znaků.")]
-        public string SerialNumber { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Výrobce je povinný.")]
-        [MaxLength(100, ErrorMessage = "Výrobce nesmí být delší než 100 znaků.")]
-        public string Manufacturer { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Datum nákupu je povinné.")]
-        public DateTime PurchaseDate { get; set; }
-
-        [Required(ErrorMessage = "Typ stroje je povinný.")]
-        public string MachineType { get; set; } = string.Empty;
-
+        // This class inherits from BaseMachineDto and can be extended if needed.
     }
 
-    // DTO pro částečnou aktualizaci stroje (PATCH).
+    public class UpdateMachineDto : BaseMachineDto
+    {
+        // This class inherits from BaseMachineDto and can be extended if needed.
+    }
+
     public class PatchMachineDto
     {
         public string? Name { get; set; }
         public string? SerialNumber { get; set; }
         public string? Manufacturer { get; set; }
+        [DataType(DataType.Date, ErrorMessage = "Purchase date must be a valid date.")]
         public DateTime? PurchaseDate { get; set; }
         public string? MachineType { get; set; }
         public int? CustomerId { get; set; }

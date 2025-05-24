@@ -2,11 +2,8 @@
 using CustomerAssetTracker.Core.Abstractions;
 using CustomerAssetTracker.Core;
 using CustomerAssetTracker.Api.DTOs;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.EntityFrameworkCore; // Pro .Include() - dočasně zde pro ukázku, ideálně v repozitáři
+
 
 namespace CustomerAssetTracker.Api.Controllers
 {
@@ -23,7 +20,7 @@ namespace CustomerAssetTracker.Api.Controllers
             _mapper = mapper;
         }
 
-        // Komentář: GET /api/machines
+        // GET /api/machines
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MachineDto>>> GetMachines()
         {
@@ -36,7 +33,7 @@ namespace CustomerAssetTracker.Api.Controllers
             return Ok(machineDtos);
         }
 
-        // Komentář: GET /api/machines/{id}
+        // GET /api/machines/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<MachineDto>> GetMachine(int id)
         {
@@ -56,7 +53,7 @@ namespace CustomerAssetTracker.Api.Controllers
             return Ok(machineDto);
         }
 
-        // Komentář: POST /api/machines
+        // POST /api/machines
         [HttpPost]
         public async Task<ActionResult<MachineDto>> CreateMachine(CreateMachineDto createMachineDto)
         {
@@ -69,7 +66,7 @@ namespace CustomerAssetTracker.Api.Controllers
             return CreatedAtAction(nameof(GetMachine), new { id = machine.Id }, machineDto);
         }
 
-        // Komentář: PUT /api/machines/{id}
+        // PUT /api/machines/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateMachine(int id, UpdateMachineDto updateMachineDto)
         {
@@ -88,7 +85,7 @@ namespace CustomerAssetTracker.Api.Controllers
             return NoContent();
         }
 
-        // Komentář: DELETE /api/machines/{id}
+        // DELETE /api/machines/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMachine(int id)
         {
@@ -105,7 +102,7 @@ namespace CustomerAssetTracker.Api.Controllers
             return NoContent();
         }
 
-        // Komentář: PATCH /api/machines/{id}
+        // PATCH /api/machines/{id}
         [HttpPatch("{id}")]
         public async Task<IActionResult> PatchMachine(int id, PatchMachineDto patchMachineDto)
         {
@@ -116,7 +113,7 @@ namespace CustomerAssetTracker.Api.Controllers
                 return NotFound();
             }
 
-            // Ruční mapování pro PATCH, aby se aktualizovaly jen poslané hodnoty.
+            //Manually mapping properties from PatchMachineDto to Machine
             if (patchMachineDto.Name != null) machine.Name = patchMachineDto.Name;
             if (patchMachineDto.SerialNumber != null) machine.SerialNumber = patchMachineDto.SerialNumber;
             if (patchMachineDto.Manufacturer != null) machine.Manufacturer = patchMachineDto.Manufacturer;

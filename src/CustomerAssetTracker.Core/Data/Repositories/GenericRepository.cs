@@ -1,18 +1,15 @@
 ﻿ using Microsoft.EntityFrameworkCore;
-using CustomerAssetTracker.Core.Data; // Pro ApplicationDbContext
-using CustomerAssetTracker.Core.Abstractions; // Pro IGenericRepository
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using CustomerAssetTracker.Core.Data;
+using CustomerAssetTracker.Core.Abstractions;
 using System.Linq.Expressions;
-using System.Linq;
 
 namespace CustomerAssetTracker.Core.Repositories
 {
-    // Komentář: Obecná implementace repozitáře.
-    // Obsahuje logiku pro práci s databází pro jakoukoli entitu.
+    /// <summary>
+    /// Generic repository implementation for basic Entity Framework CRUD operations   
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        protected readonly ApplicationDbContext _context; // Odkaz na databázový kontext
+        protected readonly ApplicationDbContext _context;
 
         public GenericRepository(ApplicationDbContext context)
         {
@@ -38,7 +35,6 @@ namespace CustomerAssetTracker.Core.Repositories
         {
             IQueryable<T> query = _context.Set<T>();
 
-            // Aplikuje všechny include výrazy na dotaz.
             foreach (var include in includes)
             {
                 query = query.Include(include);
@@ -56,15 +52,11 @@ namespace CustomerAssetTracker.Core.Repositories
         {
             IQueryable<T> query = _context.Set<T>();
 
-            // Aplikuje všechny include výrazy na dotaz.
             foreach (var include in includes)
             {
                 query = query.Include(include);
             }
 
-            // Najde entitu podle ID po aplikování includes.
-            // Používáme FirstOrDefaultAsync místo FindAsync, protože FindAsync
-            // nefunguje s .Include() v paměti (pokud už entita není sledována).
             return await query.FirstOrDefaultAsync(entity => EF.Property<int>(entity, "Id") == id);
         }
 

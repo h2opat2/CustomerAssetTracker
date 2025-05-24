@@ -1,45 +1,35 @@
 ﻿    using Microsoft.AspNetCore.Mvc;
-    using CustomerAssetTracker.Core.Abstractions; // Pro IUnitOfWork
-    using CustomerAssetTracker.Core; // Pro Customer entitu
-    using CustomerAssetTracker.Api.DTOs; // Pro DTOs
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
+    using CustomerAssetTracker.Core.Abstractions; 
+    using CustomerAssetTracker.Core;
+    using CustomerAssetTracker.Api.DTOs; 
     using AutoMapper; 
 
     namespace CustomerAssetTracker.Api.Controllers
 {
-    // Komentář: Atributy pro API kontroler.
-    // [ApiController] označuje, že třída je API kontroler.
-    // [Route("api/[controller]")] definuje základní cestu pro tento kontroler (např. /api/customers).
     [ApiController]
     [Route("api/[controller]")]
     public class CustomersController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork; // Vstříknutá instance Unit of Work
-        private readonly IMapper _mapper; // Vstříknutá instance AutoMapperu
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        // Komentář: Konstruktor pro Dependency Injection.
-        // ASP.NET Core automaticky vstříkne instanci IUnitOfWork.
         public CustomersController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
-        // Komentář: GET /api/customers
-        // Získá všechny zákazníky.
+        // GET /api/customers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CustomerDto>>> GetCustomers()
         {
             var customers = await _unitOfWork.Customers.GetAllAsync(c => c.Machines, c => c.Licenses);
             var customerDtos = _mapper.Map<IEnumerable<CustomerDto>>(customers);
 
-            return Ok(customerDtos); // Vrací HTTP 200 OK s daty
+            return Ok(customerDtos); // Return HTTP 200 OK with customer data
         }
 
-        // Komentář: GET /api/customers/{id}
-        // Získá zákazníka podle ID.
+        // GET /api/customers/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<CustomerDto>> GetCustomer(int id)
         {
@@ -47,52 +37,39 @@
 
             if (customer == null)
             {
-                return NotFound(); // Vrací HTTP 404 Not Found
+                return NotFound(); // Return HTTP 404 Not Found
             }
 
             var customerDto = _mapper.Map<CustomerDto>(customer);
 
-            return Ok(customerDto); // Vrací HTTP 200 OK s daty
+            return Ok(customerDto); // Return HTTP 200 OK with customer{id} data
         }
 
-        // Komentář: POST /api/customers
-        // Vytvoří nového zákazníka.
+        // POST /api/customers
         [HttpPost]
         public async Task<ActionResult<CustomerDto>> CreateCustomer(CreateCustomerDto createCustomerDto)
         {
-            // Komentář: Zde se provádí automatická validace modelu díky [ApiController] atributu.
-            // Pokud validace selže, ASP.NET Core automaticky vrátí HTTP 400 Bad Request.
-
-            // var customer = new Customer
-            // {
-            //     Name = createCustomerDto.Name,
-            //     Address = createCustomerDto.Address,
-            //     IsForeign = createCustomerDto.IsForeign
-            // };
-
-            // Komentář: Používáme AutoMapper pro mapování CreateCustomerDto na Customer entitu.
             var customer = _mapper.Map<Customer>(createCustomerDto);
 
-
             await _unitOfWork.Customers.AddAsync(customer);
-            await _unitOfWork.CompleteAsync(); // Uloží změny do databáze
+            await _unitOfWork.CompleteAsync(); // Save changes to the database
 
-            // Komentář: Vrací HTTP 201 Created s hlavičkou Location a nově vytvořeným zdrojem.
+
             var customerDto = new CustomerDto
             {
                 Id = customer.Id,
                 Name = customer.Name,
                 Address = customer.Address,
                 IsForeign = customer.IsForeign,
-                MachineCount = 0, // Nový zákazník nemá zatím stroje/licence
-                LicenseCount = 0
+                MachineCount = 0, //New customer has no machines initially
+                LicenseCount = 0 //New customer has no licenses initially
             };
 
+            // Returns HTTP 201 Created with the location of the newly created customer.
             return CreatedAtAction(nameof(GetCustomer), new { id = customer.Id }, customerDto);
         }
 
-        // Komentář: PUT /api/customers/{id}
-        // Aktualizuje existujícího zákazníka.
+        // PUT /api/customers/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCustomer(int id, UpdateCustomerDto updateCustomerDto)
         {
@@ -100,26 +77,18 @@
 
             if (customer == null)
             {
-                return NotFound(); // Zákazník nenalezen
+                return NotFound(); // Return HTTP 404 Not Found
             }
 
-            // Aktualizace vlastností z DTO
-            // customer.Name = updateCustomerDto.Name;
-            // customer.Address = updateCustomerDto.Address;
-            // customer.IsForeign = updateCustomerDto.IsForeign;
-
-            // Komentář: Používáme AutoMapper pro aktualizaci existující entity z DTO.
-            // AutoMapper aktualizuje existující objekt 'customer' z 'updateCustomerDto'.
             _mapper.Map(updateCustomerDto, customer);
 
             _unitOfWork.Customers.Update(customer);
-            await _unitOfWork.CompleteAsync(); // Uloží změny
+            await _unitOfWork.CompleteAsync(); // Save changes to the database
 
-            return NoContent(); // Vrací HTTP 204 No Content (úspěšná aktualizace bez obsahu)
+            return NoContent(); // Returns HTTP 204 No Content (successful update without content)
         }
 
-        // Komentář: PATCH /api/customers/{id}
-        // Provádí částečnou aktualizaci zákazníka.
+        // PATCH /api/customers/{id}
         [HttpPatch("{id}")]
         public async Task<IActionResult> PatchCustomer(int id, PatchCustomerDto patchCustomerDto)
         {
@@ -127,11 +96,11 @@
 
             if (customer == null)
             {
-                return NotFound(); // Zákazník nenalezen
+                return NotFound(); // Return HTTP 404 Not Found
             }
 
-            // Komentář: Aktualizuje pouze ta pole, která byla v DTO skutečně poslána.
-            // Operátor '??' nebo kontrola '.HasValue' u nullable typů.
+            // Manually mapping properties from PatchCustomerDto to Customer
+            // Only update properties that are not null in the patch DTO
             if (patchCustomerDto.Name != null)
             {
                 customer.Name = patchCustomerDto.Name;
@@ -140,19 +109,18 @@
             {
                 customer.Address = patchCustomerDto.Address;
             }
-            if (patchCustomerDto.IsForeign.HasValue) // Pro nullable bool je nutné použít .HasValue
+            if (patchCustomerDto.IsForeign.HasValue)
             {
-                customer.IsForeign = patchCustomerDto.IsForeign.Value; // A .Value pro získání skutečné hodnoty
+                customer.IsForeign = patchCustomerDto.IsForeign.Value;
             }
 
-            _unitOfWork.Customers.Update(customer); // Označí entitu jako změněnou
-            await _unitOfWork.CompleteAsync(); // Uloží změny
+            _unitOfWork.Customers.Update(customer);
+            await _unitOfWork.CompleteAsync(); // Save changes to the database
 
-            return NoContent(); // Vrací HTTP 204 No Content (úspěšná aktualizace bez obsahu)
+            return NoContent(); // Returns HTTP 204 No Content (successful update without content)
         }
 
-        // Komentář: DELETE /api/customers/{id}
-        // Smaže zákazníka.
+        // DELETE /api/customers/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomer(int id)
         {
@@ -160,14 +128,15 @@
 
             if (customer == null)
             {
-                return NotFound(); // Zákazník nenalezen
+                return NotFound(); // Return HTTP 404 Not Found
             }
 
             _unitOfWork.Customers.Delete(customer);
-            await _unitOfWork.CompleteAsync(); // Uloží změny
+            await _unitOfWork.CompleteAsync(); // Save changes to the database
 
-            return NoContent(); // Vrací HTTP 204 No Content (úspěšné smazání bez obsahu)
+            return NoContent(); // Returns HTTP 204 No Content (successful update without content)
         }
+
     }
 }
     

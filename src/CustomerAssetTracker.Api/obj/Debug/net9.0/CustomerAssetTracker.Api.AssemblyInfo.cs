@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CustomerAssetTracker.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4351b578c6c5a5309e18a32f9a3ea0ad7c43cf31")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6e7597630a46065bada6eb8653330e2c03a0bac2")]
 [assembly: System.Reflection.AssemblyProductAttribute("CustomerAssetTracker.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CustomerAssetTracker.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

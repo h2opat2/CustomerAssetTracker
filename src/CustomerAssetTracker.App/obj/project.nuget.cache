@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "AMe/eg2MCTM=",
+  "dgSpecHash": "4BBsobjSoak=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Honza\\Soukromé\\3D Dev\\Customer Asset Tracker\\CustomerAssetTracker\\src\\CustomerAssetTracker.App\\CustomerAssetTracker.App.csproj",
+  "projectFilePath": "c:\\Users\\Honza\\Soukromé\\3D Dev\\Customer Asset Tracker\\CustomerAssetTracker\\src\\CustomerAssetTracker.App\\CustomerAssetTracker.App.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Honza\\.nuget\\packages\\microsoft.data.sqlite.core\\9.0.5\\microsoft.data.sqlite.core.9.0.5.nupkg.sha512",
     "C:\\Users\\Honza\\.nuget\\packages\\microsoft.entityframeworkcore\\9.0.5\\microsoft.entityframeworkcore.9.0.5.nupkg.sha512",

@@ -80,12 +80,12 @@ Provides RESTful HTTP services for data communication.
     * **Mapping Profiles:** Classes inheriting from `AutoMapper.Profile` where mapping rules are defined.
 
 ## Project Structure
-````text`
+```bash
 CustomerAssetTracker/
 ├── CustomerAssetTracker.sln
 ├── src/
 │   ├── CustomerAssetTracker.Core/         # Domain entities, DbContext, interfaces, repositories
-│   │   ├── Data/                          # ApplicationDbContext, ApplicationDbContextFactory
+│   │   ├── Data/                          # ApplicationDbContextA, ApplicationDbContextFactory
 │   │   │   └── Repositories/              # GenericRepository, UnitOfWork
 │   │   ├── Abstractions/                  # IGenericRepository, IUnitOfWork
 │   │   ├── Entities/                      # Customer, Machine, License, ServiceRecord, Cmm, Arm
@@ -100,7 +100,7 @@ CustomerAssetTracker/
 └── test/
 └── CustomerAssetTracker.Core.Tests/   # Unit tests for CustomerAssetTracker.Core
 └── CustomerAssetTracker.Core.Tests.csproj
-````text`
+```
 ## How to Run the Project
 
 To run the project, you need the .NET SDK (version 9.0 or newer).
